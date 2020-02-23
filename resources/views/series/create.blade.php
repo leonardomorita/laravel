@@ -4,8 +4,6 @@
     Adicionar Série
 @endsection
 
-
-
 @section('conteudo')
 @if ($errors->any())
     <div class="alert alert-danger">
