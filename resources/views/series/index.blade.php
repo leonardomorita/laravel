@@ -6,13 +6,11 @@ Séries
 
 @section('conteudo')
 
-@if(!empty($mensagem))
-<div class="alert alert-success">
-    {{ $mensagem }}
-</div>
-@endif
+@include('mensagem', ['mensagem' => $mensagem])
 
-<a href="{{ route('form_criar_serie') }}" class="btn btn-dark mb-2">Adicionar</a>
+@auth
+    <a href="{{ route('form_criar_serie') }}" class="btn btn-dark mb-2">Adicionar</a>
+@endauth
 
 <ul class="list-group">
     @foreach($series as $serie)
@@ -30,20 +28,24 @@ Séries
             </div>
 
             <span class="d-flex">
-                <button class="btn btn-info btn-sm mr-1" onclick="toggleInput({{ $serie->id }})">
-                    <i class="fas fa-edit"></i>
-                </button>
+                @auth
+                    <button class="btn btn-info btn-sm mr-1" onclick="toggleInput({{ $serie->id }})">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                @endauth
                 <a href="/series/{{ $serie->id }}/temporadas" class="btn btn-info btn-sm mr-1">
                     <i class="fas fa-external-link-alt"></i>
                 </a>
-                <form method="post" action="/series/{{ $serie->id }}"
-                      onsubmit="return confirm('Tem certeza que deseja remover {{ addslashes($serie->nome) }}?')">
-                    @csrf
-                    @method('DELETE')
-                    <button class="btn btn-danger btn-sm">
-                        <i class="far fa-trash-alt"></i>
-                    </button>
-                </form>
+                @auth
+                    <form method="post" action="/series/{{ $serie->id }}"
+                          onsubmit="return confirm('Tem certeza que deseja remover {{ addslashes($serie->nome) }}?')">
+                        @csrf
+                        @method('DELETE')
+                        <button class="btn btn-danger btn-sm">
+                            <i class="far fa-trash-alt"></i>
+                        </button>
+                    </form>
+                @endauth
             </span>
         </li>
     @endforeach
